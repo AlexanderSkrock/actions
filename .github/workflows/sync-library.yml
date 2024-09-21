@@ -20,10 +20,11 @@ jobs:
 
         - name: Check for changes
           id: check-for-changes
+          continue-on-error: true
           run: git diff-index --quiet HEAD --
 
         - name: Commit & Push changes
-          if: ${{ steps.check-for-changes.outcome != 'success' }}
+          if: ${{ steps.check-for-changes.outcome == 'failure' }}
           run: |
             git config --global user.name github-actions
             git config --global user.email github-actions@github.com

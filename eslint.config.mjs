@@ -25,10 +25,7 @@ const compat = new FlatCompat({
 export default [
   {
     ignores: [
-      "**/webpack.config.js",
-      "lib/**/*",
-      "src/testdata/**/*",
-      "tests/**/*",
+      "dist/**/*",
       "eslint.config.mjs",
       ".github/**/*",
     ],
