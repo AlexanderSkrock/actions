@@ -1,0 +1,33 @@
+name: Synchronize library
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - src/**
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+    steps:
+        - uses: actions/setup-node@v4
+        - uses: actions/checkout@v4
+
+        - run: npm ci
+        - run: npm run build
+
+        - name: Check for changes
+          id: check-for-changes
+          continue-on-error: true
+          run: git diff-index --quiet HEAD --
+
+        - name: Commit & Push changes
+          if: ${{ steps.check-for-changes.outcome == 'failure' }}
+          run: |
+            git config --global user.name github-actions
+            git config --global user.email github-actions@github.com
+            git add ./lib
+            git commit -m "Synchronized library changes of $GITHUB_SHA"
+            git push
